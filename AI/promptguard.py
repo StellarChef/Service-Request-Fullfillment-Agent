@@ -1,12 +1,11 @@
 import re
-from pathlib import Path
 
 from pydantic import BaseModel, ValidationError
 
 from AI.openaiclient import AIClient
+from config.config import PROMPTS_DIR
 
 
-PROMPTS_DIR = Path(__file__).parent / "prompts"
 FIRST_LINE_SECURITY_PROMPT = (PROMPTS_DIR / "firstlinesecurityprompt.md").read_text(encoding="utf-8")
 
 MAX_INPUT_LENGTH = 4000

@@ -15,3 +15,23 @@ class Request(BaseModel):
     id: str
     title: str
     client_input: ClientInput
+
+class Complaint(BaseModel):
+    request: Request
+    client: Client
+
+class Inquiry(BaseModel):
+    request: Request
+    client: Client
+    
+class Spam(BaseModel):
+    request: Request
+    client: Client
+
+class ClassificationModel(BaseModel):
+    """
+    Pydantic model for classification input.
+    """
+    complain: Complaint
+    inquiry: Inquiry
+    spam: Spam  
