@@ -1,9 +1,6 @@
 from openai import OpenAI
-from dotenv import load_dotenv
 
-load_dotenv()  # Load environment variables from .env file
-
-
+import config.config
 
 class AIClient:
     def __init__(self):
