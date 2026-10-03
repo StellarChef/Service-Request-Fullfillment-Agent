@@ -1,3 +1,5 @@
+from typing import Literal
+
 from pydantic import BaseModel
 
 
@@ -28,10 +30,10 @@ class Spam(BaseModel):
     request: Request
     client: Client
 
-class ClassificationModel(BaseModel):
-    """
-    Pydantic model for classification input.
-    """
-    complain: Complaint
-    inquiry: Inquiry
-    spam: Spam  
+
+class InputClassificationModel(BaseModel):
+    category: Literal["COMPLAINT", "INQUIRY", "SPAM"]
+    confidence: float
+    language: str
+    flagged: bool
+

@@ -6,7 +6,7 @@ from AI.openaiclient import AIClient
 from config.config import PROMPTS_DIR
 
 
-FIRST_LINE_SECURITY_PROMPT = (PROMPTS_DIR / "firstlinesecurityprompt.md").read_text(encoding="utf-8")
+FIRST_LINE_SECURITY_PROMPT = (PROMPTS_DIR / "firstlinesecurityprompt.j2").read_text(encoding="utf-8")
 
 MAX_INPUT_LENGTH = 4000
 

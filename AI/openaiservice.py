@@ -6,7 +6,7 @@ openai_client = AIClient()
 chunker = Chunker()
 
 class AIService:
-    def __init__(self, client=openai_client):
+    def __init__(self, client=AIClient):
         self.client = client
 
     def _complaint_input(self, complaint_text):
