@@ -11,7 +11,7 @@ class AIClassification:
     def __init__(self, client: AIClient):
         self.client = client
 
-    def promptclassify(self, text):
+    def _promptclassify(self, text: str) -> InputClassificationModel:
         raw = self.client.chat([
             {"role": "system", "content": self._CLASSIFY_PROMPT.read_text(encoding="utf-8")},
             {"role": "user", "content": (
@@ -21,4 +21,7 @@ class AIClassification:
         ])
         result = InputClassificationModel.model_validate_json(raw)
         return result
+    def classify(self, text: str) -> InputClassificationModel:
+        """Classifies the input text into one of the categories: COMPLAINT, INQUIRY, or SPAM."""
+        return self._promptclassify(text)
     
