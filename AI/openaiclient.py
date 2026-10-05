@@ -1,6 +1,6 @@
 from openai import OpenAI
 
-import config.config
+from config.config import env
 
 class AIClient:
     def __init__(self):

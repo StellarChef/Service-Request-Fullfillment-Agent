@@ -13,27 +13,21 @@ class Client(BaseModel):
     phone: str | None
 
 
-class Request(BaseModel):
-    id: str
-    title: str
-    client_input: ClientInput
-
-class Complaint(BaseModel):
-    request: Request
-    client: Client
-
-class Inquiry(BaseModel):
-    request: Request
-    client: Client
-    
-class Spam(BaseModel):
-    request: Request
-    client: Client
-
-
 class InputClassificationModel(BaseModel):
     category: Literal["COMPLAINT", "INQUIRY", "SPAM"]
     confidence: float
     language: str
     flagged: bool
+
+class Policychunk(BaseModel):
+    id: str
+    text: str
+    similarity: float
+    category: Literal["COMPLAINT", "INQUIRY", "SPAM"]
+
+class ServiceResponse(BaseModel):
+  classification: InputClassificationModel
+  matched_policies: list[Policychunk]
+  reply: str
+  flagged: bool
 

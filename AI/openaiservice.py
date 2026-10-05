@@ -15,11 +15,12 @@ class AIService:
     def handle_request(self, text: str) -> str:
         """Runs the whole pipeline: guard -> classification -> policy matching -> reply."""
         pass
-
+#✅
     def verify_injection(self, text: str) -> None:
         """Step 1: first-line injection check. Raises PromptInjectionError if the text is rejected."""
         return self.guard.validate(text)
 
+#✅
     def classify_request(self, text: str) -> InputClassificationModel:
         """Step 2: assigns the request to COMPLAINT, INQUIRY or SPAM."""
         return self.classifier.classify(text)

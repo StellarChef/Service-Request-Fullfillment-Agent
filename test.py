@@ -1,15 +1,19 @@
 from AI.openaiclient import AIClient
-from AI.promptguard import PromptGuard, InjectionCheck, PromptInjectionError
+from AI.promptguard import PromptGuard, PromptInjectionError
 from AI.openaiservice import AIService
+from AI.clasification import AIClassification
 
 client = AIClient()
-guard = PromptGuard(AIClient())
-service = AIService()
+guard = PromptGuard(client)
+clasify = AIClassification(client)
+service = AIService(client, guard, clasify)
 
-
-question = guard.check(client.chat([
-    {"role": "system", "content": "You are a helpful assistant give me Complain Policy."},]))
-print(question)
 
 if __name__ == "__main__":
-    pass
+    text = "Zwracam się z uprzejmą prośbą, chciałabym dowiedzieć się jak mogę poprawnie dokonać wymiarów mojej sylwetki aby zamówić personalizowany Trencz"
+
+    try:
+        service.verify_injection(text)
+        print(service.classify_request(text))
+    except PromptInjectionError as e:
+        print("Blocked:", e)
