@@ -1,3 +1,5 @@
+from typing import Literal
+
 from pydantic import BaseModel
 
 
@@ -11,7 +13,21 @@ class Client(BaseModel):
     phone: str | None
 
 
-class Request(BaseModel):
+class InputClassificationModel(BaseModel):
+    category: Literal["COMPLAINT", "INQUIRY", "SPAM"]
+    confidence: float
+    language: str
+    flagged: bool
+
+class Policychunk(BaseModel):
     id: str
-    title: str
-    client_input: ClientInput
+    text: str
+    similarity: float
+    category: Literal["COMPLAINT", "INQUIRY", "SPAM"]
+
+class ServiceResponse(BaseModel):
+  classification: InputClassificationModel
+  matched_policies: list[Policychunk]
+  reply: str
+  flagged: bool
+
