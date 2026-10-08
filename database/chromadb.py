@@ -1,14 +1,23 @@
-from AI.openaiclient import AIClient
-from chromadb import 
+from functools import lru_cache
 
-class VDatabase():
+import chromadb
+from chromadb.api import ClientAPI
+from chromadb.api.models.Collection import Collection
 
-    def __init__(self, client: AIClient):
-        self.client = client
+from config.config import CHROMA_TENANT, CHROMA_DATABASE, CHROMA_API_KEY, POLICIES_COLLECTION
+
+POLICIES_COLLECTION = POLICIES_COLLECTION
+
+@lru_cache(maxsize=1)
+def get_client() -> ClientAPI:
+    # one client per process, created lazily on first use
+    return chromadb.CloudClient(
+        tenant=CHROMA_TENANT,
+        database=CHROMA_DATABASE,
+        api_key=CHROMA_API_KEY,
+    )
 
 
-    def connect(self, client):
-        
-
-    def close():
-        pass
+def get_collection(name: str = POLICIES_COLLECTION) -> Collection:
+    # embedding_function=None because embeddings are computed by AIClient
+    return get_client().get_or_create_collection(name=name, embedding_function=None)
