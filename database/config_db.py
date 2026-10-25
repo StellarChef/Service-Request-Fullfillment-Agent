@@ -1,4 +1,4 @@
-import chromadb
-from config.config import vdb_
+from config.config import CHROMA_TENANT,CHROMA_DATABASE,CHROMA_API_KEY
+from .chroma import DBClient
 
-chroma_client = chromadb.HttpClient(host='localhost', port=8000) 
+client = DBClient(CHROMA_TENANT,CHROMA_DATABASE,CHROMA_API_KEY).get_client()

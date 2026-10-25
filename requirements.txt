@@ -1,5 +1,5 @@
 pydantic
 openai
-dotenv
+python-dotenv
 jinja2
 chromadb
