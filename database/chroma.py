@@ -1,9 +1,10 @@
 import chromadb
 
+
 class DBClient:
 
     def __init__(self, tenant, database, api_key):
-        self.tenant =  tenant
+        self.tenant = tenant
         self.database = database
         self.api_key = api_key
 
