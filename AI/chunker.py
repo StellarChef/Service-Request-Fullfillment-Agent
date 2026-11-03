@@ -1,5 +1,5 @@
 class Chunker:
-    def __init__(self, chunk_size=500,overlap=25):
+    def __init__(self, chunk_size=500, overlap=25):
         self.chunk_size = chunk_size
         self.overlap = overlap
 
@@ -12,4 +12,3 @@ class Chunker:
             chunks.append(chunk)
             start += self.chunk_size - self.overlap
         return chunks
-    
