@@ -1,4 +1,4 @@
-"""Reduces any document to a CanonicalDocument (variant B).
+"""Reduces any document to a CanonicalDocument.
 
 The LLM only marks headings (line, kind, level, number, title) via structured output.
 Section texts are cut from the original by code, so content stays 1:1 and the cost

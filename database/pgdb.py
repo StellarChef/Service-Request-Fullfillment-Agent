@@ -1,7 +1,8 @@
 from .connection import client
-from AI.chunker import Chunker
+from AI.chunker import Chunker, to_chroma_metadata
 from AI.openaiclient import AIClient
-from models.schemas import ChunkMetadata, DocumentMetadata
+from models.schemas import DocumentMetadata
+from AI.documentnormalizer import DocumentNormalizer
 
 
 class Database:
@@ -9,6 +10,7 @@ class Database:
         self.client = client
         self.chunker = Chunker()
         self.ai = AIClient()
+        self.dn = DocumentNormalizer(self.ai)  # the normalizer needs a client with parse()
 
     def get_create_collection(self, collection_name):
         db = self.client
@@ -17,22 +19,19 @@ class Database:
         return collection
 
     def add_document(self, col_name: str, document: str, meta: DocumentMetadata):
-        chunks = self.chunker.chunk_text(document)
+        """normalize -> chunk -> upsert."""
+        canonical = self.dn.normalize(document, meta)
+        chunks = self.chunker.chunk_document(canonical)
         if not chunks:
-            raise ValueError(f"Document '{meta.doc_id}' is empty")
+            raise ValueError(f"Document '{meta.doc_id}' produced no chunks")
 
-        # Chroma rejects None values, so unset optional fields are dropped
-        metadatas = [
-            ChunkMetadata(**meta.model_dump(), chunk_index=i).model_dump(exclude_none=True)
-            for i in range(len(chunks))
-        ]
-
+        texts = [text for text, _ in chunks]
         collection = self.get_create_collection(col_name)
         collection.upsert(
-            ids=[f"{meta.doc_id}#c{i}" for i in range(len(chunks))],
-            documents=chunks,
-            embeddings=self.ai.embed_many(chunks),
-            metadatas=metadatas,
+            ids=[f"{meta.doc_id}#c{m.chunk_index}" for _, m in chunks],
+            documents=texts,
+            embeddings=self.ai.embed_many(texts),
+            metadatas=[to_chroma_metadata(m) for _, m in chunks],
         )
 
     def query_collection(
