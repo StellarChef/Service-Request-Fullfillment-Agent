@@ -111,6 +111,11 @@ class Policychunk(BaseModel):
     text: str
     similarity: float
     category: Literal["COMPLAINT", "INQUIRY", "SPAM"]
+    collection: str  # collection the chunk came from
+    metadata: dict = Field(default_factory=dict)  # Chroma chunk metadata (doc_title, section_path, ...)
+    # how strongly reasoning confirms that the fragment applies to the request (0-100);
+    # None until PolicyMatcher.reasoning fills it
+    reason_percentage: float | None = Field(default=None, ge=0, le=100)
 
 class ServiceResponse(BaseModel):
   classification: InputClassificationModel

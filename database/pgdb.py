@@ -35,12 +35,20 @@ class Database:
         )
 
     def query_collection(
-        self, col_name: str, query_embedding: list[float], n_results=3
+        self,
+        col_name: str,
+        query_embedding: list[float],
+        n_results: int = 3,
+        where: dict | None = None,
     ):
+        """Returns the n nearest chunks to the embedding (closest first).
+        where: optional Chroma metadata filter, e.g. {"is_latest": True}."""
         collection = self.client.get_collection(col_name)
         results = collection.query(
             query_embeddings=[query_embedding],
             n_results=n_results,
+            where=where,
+            include=["documents", "metadatas", "distances"],
         )
         return results
     
